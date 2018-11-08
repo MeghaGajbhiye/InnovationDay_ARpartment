@@ -3,7 +3,10 @@ import json
 from bs4 import BeautifulSoup
 import urllib2
 
-lakeshore_apartment=urllib2.urlopen("http://129.213.131.176/lakeshore-pearl")
+# lakeshore_apartment=urllib2.urlopen("http://129.213.131.176/lakeshore-pearl")
+lakeshore_apartment=urllib2.urlopen("http://129.213.84.36/lakeshore-pearl")
+
+
 apartment_list = json.loads(lakeshore_apartment.read())
 
 class LakeshoreApartmentInfo:
