@@ -71,3 +71,7 @@ def azulapartments():
         apartment.update({"floorplan": apartment_floorplan})
 
     return json.dumps(azule_apartment_list)
+
+if __name__ =='__main__':
+    app.debug= True
+    app.run(host='0.0.0.0', port=5000)
