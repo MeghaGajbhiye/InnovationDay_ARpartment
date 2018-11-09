@@ -16,7 +16,8 @@ class LakeshoreApartmentInfo:
         amenities = self.soup.find_all('div', id='amenities')
         p = amenities[0].find_all("p")
         p1 = json.dumps([elem.get_text() for elem in p])
-        return p1
+        p1_list = json.loads(p1)
+        return p1_list
 
     def apartment_floorplan(self):
         '''Fetching apartment floorplan'''
@@ -26,6 +27,22 @@ class LakeshoreApartmentInfo:
             if "floorplans" in image['src']:
                 floorplans.append(image['src'])
         return floorplans[0]
+
+    def apartment_title(self, apartment):
+        '''Fetching bathroom, bedroom and sqrft'''
+        apartment_title= apartment["title"]
+        my_string= apartment_title.split()
+        print my_string[0],my_string[2], my_string[4]
+        apartment.update({"Bed": int(my_string[0])})
+        apartment.update({"Bath": int(my_string[2])})
+        apartment.update({"Space": int(my_string[4])})
+
+    def apartment_price(self, apartment):
+        '''Fetching minimum and maximum price'''
+        apartment_price = apartment["price"]
+        my_string = apartment_price.split()
+        apartment.update({"Min_price": float(my_string[1].replace("$", "").replace(",",""))})
+        apartment.update({"Max_price": float(my_string[3].replace("$", "").replace(",",""))})
 
 class AzulApartmentInfo:
     def __init__(self, url):
@@ -58,6 +75,8 @@ def lakeshore():
         apartment.update({"amenities": apartment_amenities})
         apartment_floorplan = apartment_info.apartment_floorplan()
         apartment.update({"floorplan": apartment_floorplan})
+        apartment_info.apartment_title(apartment)
+        apartment_info.apartment_price(apartment)
 
     return json.dumps(lakeshore_apartment_list)
 
