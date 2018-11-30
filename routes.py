@@ -67,7 +67,7 @@ def index():
 
 @app.route('/lakeshore')
 def lakeshore():
-    lakeshore_apartment = urllib2.urlopen("http://129.213.84.36/lakeshore-pearl")
+    lakeshore_apartment = urllib2.urlopen("http://129.213.86.83/lakeshore-pearl")
     lakeshore_apartment_list = json.loads(lakeshore_apartment.read())
     for apartment in lakeshore_apartment_list:
         apartment_info = LakeshoreApartmentInfo(apartment["url"])
@@ -82,7 +82,7 @@ def lakeshore():
 
 @app.route('/azulapartments')
 def azulapartments():
-    azulapartments = urllib2.urlopen("http://129.213.84.36/azulapartments")
+    azulapartments = urllib2.urlopen("http://129.213.86.83/azulapartments")
     azule_apartment_list = json.loads(azulapartments.read())
     for apartment in azule_apartment_list:
         apartment_info = AzulApartmentInfo(apartment["url"])
