@@ -44,6 +44,27 @@ class LakeshoreApartmentInfo:
         apartment.update({"Min_price": float(my_string[1].replace("$", "").replace(",",""))})
         apartment.update({"Max_price": float(my_string[3].replace("$", "").replace(",",""))})
 
+class SevenEastInfo:
+
+    def __init__(self, apartment):
+        ''' Initializing Parameters for SevenEast '''
+        self.apartment = apartment
+
+    def apartment_title(self):
+        '''Fetching bathroom, bedroom and sqrft'''
+        apartment_title= self.apartment["title"]
+        my_string= apartment_title.split()
+        self.apartment.update({"Bed": my_string[1]})
+        self.apartment.update({"Bath": int(my_string[3])})
+        self.apartment.update({"Space": int(my_string[5].replace(",",""))})
+
+    def apartment_price(self):
+        '''Fetching minimum and maximum price'''
+        apartment_price = self.apartment["price"]
+        my_string = apartment_price.split()
+        self.apartment.update({"Min_price": float(my_string[0].replace("$", "").replace(",",""))})
+        self.apartment.update({"Max_price": float(my_string[2].replace("$", "").replace(",",""))})
+
 class AzulApartmentInfo:
     def __init__(self, url):
         ''' Initializing Parameters for URL '''
@@ -90,6 +111,18 @@ def azulapartments():
         apartment.update({"floorplan": apartment_floorplan})
 
     return json.dumps(azule_apartment_list)
+
+@app.route('/seveneast')
+def seveneast():
+    seveneast = urllib2.urlopen("http://129.213.86.83/7east-austin")
+    # print (seveneast)
+    seveneast_list = json.loads(seveneast.read())
+    for apartment in seveneast_list:
+        apartment_info = SevenEastInfo(apartment)
+        apartment_info.apartment_title()
+        apartment_info.apartment_price()
+
+    return json.dumps(seveneast_list)
 
 if __name__ =='__main__':
     app.debug= True
