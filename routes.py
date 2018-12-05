@@ -49,12 +49,17 @@ class SevenEastInfo:
     def __init__(self, apartment):
         ''' Initializing Parameters for SevenEast '''
         self.apartment = apartment
+        self.bed = 0
 
     def apartment_title(self):
         '''Fetching bathroom, bedroom and sqrft'''
         apartment_title= self.apartment["title"]
         my_string= apartment_title.split()
-        self.apartment.update({"Bed": my_string[1]})
+        if my_string[1] == "S":
+            self.bed = 1
+        else:
+            self.bed=my_string[1]
+        self.apartment.update({"Bed": int(self.bed)})
         self.apartment.update({"Bath": int(my_string[3])})
         self.apartment.update({"Space": int(my_string[5].replace(",",""))})
 
