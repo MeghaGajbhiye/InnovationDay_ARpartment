@@ -1,14 +1,14 @@
 from app import app
 import json
 from bs4 import BeautifulSoup
-import urllib2
+import urllib.request
 
 class LakeshoreApartmentInfo:
 
     def __init__(self, url):
         ''' Initializing Parameters for URL '''
         self.url = url
-        page = urllib2.urlopen(self.url)
+        page = urllib.request.urlopen(self.url)
         self.soup = BeautifulSoup(page, "html.parser")
 
     def apartment_amenities(self):
@@ -32,7 +32,7 @@ class LakeshoreApartmentInfo:
         '''Fetching bathroom, bedroom and sqrft'''
         apartment_title= apartment["title"]
         my_string= apartment_title.split()
-        print my_string[0],my_string[2], my_string[4]
+        print (my_string[0],my_string[2], my_string[4])
         apartment.update({"Bed": int(my_string[0])})
         apartment.update({"Bath": int(my_string[2])})
         apartment.update({"Space": int(my_string[4])})
@@ -74,7 +74,7 @@ class AzulApartmentInfo:
     def __init__(self, url):
         ''' Initializing Parameters for URL '''
         self.url = url
-        page = urllib2.urlopen(self.url)
+        page = urllib.request.urlopen(self.url)
         self.soup = BeautifulSoup(page, "html.parser")
 
     def apartment_floorplan(self):
@@ -93,7 +93,7 @@ def index():
 
 @app.route('/lakeshore')
 def lakeshore():
-    lakeshore_apartment = urllib2.urlopen("http://129.213.86.83/lakeshore-pearl")
+    lakeshore_apartment = urllib.request.urlopen("http://129.213.86.83/lakeshore-pearl")
     lakeshore_apartment_list = json.loads(lakeshore_apartment.read())
     for apartment in lakeshore_apartment_list:
         apartment_info = LakeshoreApartmentInfo(apartment["url"])
@@ -108,18 +108,20 @@ def lakeshore():
 
 @app.route('/azulapartments')
 def azulapartments():
-    azulapartments = urllib2.urlopen("http://129.213.86.83/azulapartments")
+    azulapartments = urllib.request.urlopen("http://132.145.167.54:8080/azulapartments")
     azule_apartment_list = json.loads(azulapartments.read())
+    print (azulapartments)
     for apartment in azule_apartment_list:
         apartment_info = AzulApartmentInfo(apartment["url"])
         apartment_floorplan = apartment_info.apartment_floorplan()
         apartment.update({"floorplan": apartment_floorplan})
-
+        print (apartment_info, apartment_floorplan)
+    print ( azule_apartment_list)
     return json.dumps(azule_apartment_list)
 
 @app.route('/seveneast')
 def seveneast():
-    seveneast = urllib2.urlopen("http://129.213.86.83/7east-austin")
+    seveneast = urllib.request.urlopen("http://129.213.86.83/7east-austin")
     # print (seveneast)
     seveneast_list = json.loads(seveneast.read())
     for apartment in seveneast_list:
